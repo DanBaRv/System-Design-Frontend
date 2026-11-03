@@ -126,7 +126,7 @@ public/default_video.mp4
 Реализовано в `ChannelCard` (обложка) и `FeedPage` (видео) через оператор `??`:
 
 ```typescript
-src={channel.coverUrl ?? '/default_cover.jpg'}
+src={channel.videoUrl ?? '/default_cover.jpg'}
 ```
 
 ---
@@ -137,13 +137,14 @@ src={channel.coverUrl ?? '/default_cover.jpg'}
 
 ```typescript
 interface Channel {
-  id: number
-  name: string
-  topic: string
-  subscribersCount: number
-  averageReach: number
-  coverUrl: string | null
-  videoUrl: string | null
+    id: number
+    name: string
+    topic: string
+    subscribersCount: number
+    averageReach: number
+    adPrice: number
+    coverUrl: string | null
+    videoUrl: string | null
 }
 ```
 

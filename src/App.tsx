@@ -1,38 +1,32 @@
-import { Navbar } from './components/navbar'
-import { useState } from 'react'
-import { FeedPage } from './components/feedPage'
-import { CatalogPage } from './components/CatalogPage'
-
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import type { RootState } from './store';
+import { Navbar } from './components/navbar';
+import { FeedPage } from './components/feedPage';
+import { CatalogPage } from './components/CatalogPage';
+import { AddChannelPage } from './components/AddChannelPage';
+import { AuthPage } from './components/AuthPage';
+import { LoadingOverlay } from './components/LoadingOverlay';
 
 function App() {
+  const [page, setPage] = useState('feed');
+  const channelsLoading = useSelector((s: RootState) => s.channels.loading);
+  const authLoading = useSelector((s: RootState) => s.auth.loading);
 
-  const [page, setPage] = useState('feed')
+  return (
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      <LoadingOverlay visible={channelsLoading || authLoading} />
 
-  
-    return (
-        <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <main style={{ flex: 1, overflowY: page === 'feed' ? 'hidden' : 'auto', position: 'relative' }}>
-            {/* если  page === 'feed' - истина то риусеум <FeedPage /> ,
-            ёёё а это вообще функция
-            .а если ложь - ничего*/}
-            {page === 'feed' && <FeedPage />}
-            {page === 'catalog' && <CatalogPage />}
-            </main>
+      <main style={{ flex: 1, overflowY: page === 'feed' ? 'hidden' : 'auto', position: 'relative' }}>
+        {page === 'feed' && <FeedPage />}
+        {page === 'catalog' && <CatalogPage />}
+        {page === 'add' && <AddChannelPage onPublished={() => setPage('catalog')} />}
+        {page === 'auth' && <AuthPage onSuccess={() => setPage('feed')} />}
+      </main>
 
-
-            {/* здесь Navbar - это обращение к ребенку а 
-            именно к файлу navbar.tsx и его функиции navbar */}
-            {/* здесь page = {page} -   page - просто имя которое мы писали
-            в navbar.tsx в интерфейсе , а {page} - переменная полученная из
-              const [page, setPage] = useState('feed')
-              */}
-              {/* сначало мы кликаем по кнпке из навбара, затем там выполняется
-              onClick={() => onNavigate('feed') которая смотрит на
-              onNavigate: (page: string) => void куда мы передали в App  setPage*/}
-
-            <Navbar page ={page} onNavigate = {setPage} />
-        </div>
-    )
+      <Navbar page={page} onNavigate={setPage} />
+    </div>
+  );
 }
 
-export default App
+export default App;

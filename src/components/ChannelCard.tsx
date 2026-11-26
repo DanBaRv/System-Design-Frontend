@@ -6,64 +6,48 @@ interface ChannelCardProps {
   canDelete: boolean;
   disabled: boolean;
   onDelete: (id: number) => void;
+  onOpenDetail: (channel: ChannelResponseDto) => void;
 }
 
-export function ChannelCard({ channel, canDelete, disabled, onDelete }: ChannelCardProps) {
+export function ChannelCard({ channel, canDelete, disabled, onDelete, onOpenDetail }: ChannelCardProps) {
   return (
-    <div
-      style={{
-        backgroundColor: '#f8fafc',
-        borderRadius: '16px',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        border: '1px solid #e2e8f0',
-      }}
-    >
+    <div className="channel-card-item">
       <img
         src={mediaUrl(channel.coverUrl, '/default_cover.jpg')}
         alt={channel.name}
-        style={{ width: '100%', height: '150px', objectFit: 'cover' }}
+        className="channel-card-img"
+        onClick={() => onOpenDetail(channel)}
       />
 
-      <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', gap: '6px', flex: 1 }}>
-        <div
-          style={{
-            fontWeight: 'bold',
-            fontSize: '13px',
-            color: '#0f172a',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          {channel.name}
-        </div>
+      <div className="channel-card-body">
+        <div className="channel-card-title">{channel.name}</div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748b' }}>
+        <div className="channel-card-metrics">
           <span>📊 {channel.averageReach ?? 0}</span>
           <span>👥 {channel.subscribersCount ?? 0}</span>
         </div>
 
-        {canDelete && (
+        <div className="channel-card-actions">
           <button
+            type="button"
             disabled={disabled}
-            onClick={() => onDelete(channel.id)}
-            style={{
-              marginTop: 'auto',
-              backgroundColor: '#dc2626',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '12px',
-              padding: '6px 0',
-              fontSize: '12px',
-              fontWeight: '500',
-              cursor: 'pointer',
-            }}
+            onClick={() => onOpenDetail(channel)}
+            className="btn-detail"
           >
-            Удалить
+            Подробнее
           </button>
-        )}
+
+          {canDelete && (
+            <button
+              type="button"
+              disabled={disabled}
+              onClick={() => onDelete(channel.id)}
+              className="btn-delete"
+            >
+              Удалить
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

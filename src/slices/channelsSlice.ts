@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk,type PayloadAction} from '@reduxjs/toolkit';
 import { api } from '../api';
 import type { ChannelResponseDto } from '../api/Api';
 import { channels as MOCK_CHANNELS } from '../data/channels';
@@ -10,6 +10,7 @@ interface ChannelsState {
   draftChannel: ChannelResponseDto | null;
   loading: boolean;
   error: string | null;
+  selectedChannel: ChannelResponseDto | null;
 }
 
 const initialState: ChannelsState = {
@@ -19,6 +20,7 @@ const initialState: ChannelsState = {
   draftChannel: null,
   loading: false,
   error: null,
+  selectedChannel: null
 };
 
 const asDto = (list: typeof MOCK_CHANNELS) => list as unknown as ChannelResponseDto[];
@@ -146,6 +148,9 @@ const channelsSlice = createSlice({
     clearDraft(state) {
       state.draftChannel = null;
     },
+    setSelectedChannel(state, action: PayloadAction<ChannelResponseDto | null>) {
+      state.selectedChannel = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -265,5 +270,5 @@ const channelsSlice = createSlice({
   },
 });
 
-export const { setMinSubscribers, resetFilters, clearDraft } = channelsSlice.actions;
+export const { setMinSubscribers, resetFilters, clearDraft, setSelectedChannel } = channelsSlice.actions;
 export default channelsSlice.reducer;

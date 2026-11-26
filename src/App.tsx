@@ -7,6 +7,7 @@ import { CatalogPage } from './components/CatalogPage';
 import { AddChannelPage } from './components/AddChannelPage';
 import { AuthPage } from './components/AuthPage';
 import { LoadingOverlay } from './components/LoadingOverlay';
+import { ChannelDetailPage } from './components/ChannelDetailPage';
 
 function App() {
   const [page, setPage] = useState('feed');
@@ -19,9 +20,10 @@ function App() {
 
       <main style={{ flex: 1, overflowY: page === 'feed' ? 'hidden' : 'auto', position: 'relative' }}>
         {page === 'feed' && <FeedPage />}
-        {page === 'catalog' && <CatalogPage />}
-        {page === 'add' && <AddChannelPage onPublished={() => setPage('catalog')} />}
+        {page === 'catalog' && <CatalogPage onOpenDetail={() => setPage('detail')} />}
+        {page === 'detail' && <ChannelDetailPage onBack={() => setPage('catalog')} />}        {page === 'add' && <AddChannelPage onPublished={() => setPage('catalog')} />}
         {page === 'auth' && <AuthPage onSuccess={() => setPage('feed')} />}
+
       </main>
 
       <Navbar page={page} onNavigate={setPage} />
